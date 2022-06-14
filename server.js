@@ -26,9 +26,15 @@ io.on("connection", (socket) => {
 
   //Allow socket.io to join a room
   socket.on("join-room", (data) => {
-      socket.join(data);
-      console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
+
+  //Create a socket.io event to send the message to the server.
+    socket.on("send-message", (data) => {  
+        //Emit the message to the server and people in the room
+        socket.to(data.room).emit("receive-message", data);
+    })
 
   socket.on("disconnect", () => {
     console.log(`user disconnected with id: ${socket.id}`);
